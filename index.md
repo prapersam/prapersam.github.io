@@ -6,6 +6,7 @@ layout: default
 # **TEMPORADA 24/25 LIGA ENDESA** #
 
 *Página hecha por Samuel Prado Pereira*
+<hr> </hr>
 
 <img src="https://phantom-elmundo.unidadeditorial.es/814add5ab50f4661140bcab3b56aabf9/crop/75x0/2027x1303/resize/1200/f/webp/assets/multimedia/imagenes/2020/04/20/15873890554335.jpg">
 
