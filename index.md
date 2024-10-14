@@ -5,4 +5,4 @@ layout: default
 
 Esta página utiliza la plantilla de la página web [Just the Docs] . Utilizaremos esto para hacer nuestra propia web desde [GitHub Pages] – el archivo [README] explica como hacer todo. 
 
-<img src="https://www.baskonia.com/wp-content/uploads/2020/03/acb.jpg">
+<img src="[https://www.baskonia.com/wp-content/uploads/2020/03/acb.jpg](https://upload.wikimedia.org/wikipedia/commons/e/e7/Liga_Endesa_2019_logo.svg)">
