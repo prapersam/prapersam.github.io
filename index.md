@@ -1,5 +1,5 @@
 ---
-title: Home
+title: EVOLUCIÓN DE LOS VIDEOJUEGOS
 layout: home
 ---
 
