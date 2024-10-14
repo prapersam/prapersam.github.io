@@ -5,7 +5,7 @@ layout: default
 
 Esta página utiliza la plantilla de la página web [Just the Docs] . Utilizaremos esto para hacer nuestra propia web desde [GitHub Pages] – el archivo [README] explica como hacer todo. 
 
-Si [Jekyll] está instalado en nuestro ordenador, you can also build and preview the created site *locally*. This lets you test changes before committing them, and avoids waiting for GitHub Pages.[^1] And you will be able to deploy your local build to a different platform than GitHub Pages.
+Si [Jekyll] está instalado en nuestro ordenador, puedes construir y previsualizar la página *localmente*. Te deja haver pruebas con los cambios antes de hacer commit, y evita esperar por GitHub Pages.[^1] 
 
 More specifically, the created site:
 
