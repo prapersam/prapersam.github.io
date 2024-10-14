@@ -1,11 +1,11 @@
 ---
 title: EVOLUCIÓN DE LOS VIDEOJUEGOS
-layout: home
+layout: default
 ---
 
-This is a *bare-minimum* template to create a Jekyll site that uses the [Just the Docs] theme. You can easily set the created site to be published on [GitHub Pages] – the [README] file explains how to do that, along with other details.
+Esta página utiliza la plantilla de la página web [Just the Docs] . Utilizaremos esto para hacer nuestra propia web desde [GitHub Pages] – el archivo [README] explica como hacer todo. 
 
-If [Jekyll] is installed on your computer, you can also build and preview the created site *locally*. This lets you test changes before committing them, and avoids waiting for GitHub Pages.[^1] And you will be able to deploy your local build to a different platform than GitHub Pages.
+Si [Jekyll] está instalado en nuestro ordenador, you can also build and preview the created site *locally*. This lets you test changes before committing them, and avoids waiting for GitHub Pages.[^1] And you will be able to deploy your local build to a different platform than GitHub Pages.
 
 More specifically, the created site:
 
