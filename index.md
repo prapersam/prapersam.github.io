@@ -1,5 +1,5 @@
 ---
-title: EVOLUCIÓN DE LOS VIDEOJUEGOS
+title: PÁGINA PRINCIPAL
 layout: default
 ---
 
