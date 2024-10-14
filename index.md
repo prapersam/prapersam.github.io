@@ -1,5 +1,7 @@
 ---
 title: LIGA 24/25 BALONCESTO
+title2: EQUIPO 1
+title3: EQUIPO 2
 layout: default
 ---
 
