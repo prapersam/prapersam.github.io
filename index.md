@@ -3,9 +3,9 @@ title: LIGA 24/25 BALONCESTO
 layout: default
 ---
 
-# TEMPORADA 24/25 LIGA ENDESA #
+# **TEMPORADA 24/25 LIGA ENDESA** #
 
-Esta página utiliza la plantilla de la página web [Just the Docs] . Utilizaremos esto para hacer nuestra propia web desde [GitHub Pages] – el archivo [README] explica como hacer todo. 
+*Página hecha por Samuel Prado Pereira*
 
 <img src="https://phantom-elmundo.unidadeditorial.es/814add5ab50f4661140bcab3b56aabf9/crop/75x0/2027x1303/resize/1200/f/webp/assets/multimedia/imagenes/2020/04/20/15873890554335.jpg">
 
