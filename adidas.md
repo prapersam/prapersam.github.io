@@ -1,7 +1,7 @@
 --- 
 title: Adidas
 layout: normal
-parent: Zapatillas
+parent: ZAPATILLAS
 nav_order: 2
 ---
 
