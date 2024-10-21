@@ -27,3 +27,13 @@ Pac-Man, originalmente llamado Puck Man en Japón, es un videojuego de laberinto
 <img src="https://i.ytimg.com/vi/sNZzcPzrXkc/maxresdefault.jpg">
 
 Street Fighter ​​es un videojuego de lucha arcade de 1987 desarrollado y publicado por Capcom . Es el primer videojuego de lucha competitivo producido por la compañía y la primera entrega de la serie Street Fighter . Fue un éxito comercial en los arcades e introdujo ataques especiales y algunas de las convenciones que se convirtieron en estándar en los videojuegos de lucha posteriores, como los controles de seis botones y el uso de movimientos especiales basados ​​en comandos.
+
+# **4. Megaman** #
+<img src="https://i.blogs.es/2c85ec/megaman/450_1000.jpg">
+
+Mega Man, conocido como Rockman en Japón, es un videojuego de acción-plataformas de 1987 desarrollado y publicado por Capcom para la Nintendo Entertainment System. Fue dirigida por Akira Kitamura, con Nobuyuki Matsushima como programador principal, y es el primer juego de la franquicia Mega Man y la serie original de videojuegos. Mega Man fue producido por un pequeño equipo específicamente para el mercado de consolas domésticas, por primera vez para Capcom, que anteriormente se centraba en los títulos arcade.
+
+# **5. Sonic The Hedgehog** #
+<img src="https://www.nosolobits.com/imagenes/publicacion/retro-review-sonic-the-hedgehog_1150765611.jpg">
+
+Sonic the Hedgehog es unaserie de videojuegos y franquicia de medios creada por los desarrolladores japoneses Yuji Naka , Naoto Ohshima y Hirokazu Yasuhara para Sega . La franquicia sigue a Sonic , un erizo azul antropomórfico que lucha contra el malvado Doctor Eggman , un científico loco . Los principales juegos de Sonic the Hedgehog son plataformas desarrollados principalmente por Sonic Team ; otros juegos, desarrollados por varios estudios, incluyen spin-offs en los géneros de carreras , lucha , fiesta y deportes . La franquicia también incorpora medios impresos , animaciones , largometrajes y merchandising.
