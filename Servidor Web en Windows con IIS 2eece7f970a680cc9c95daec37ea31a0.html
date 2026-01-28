@@ -1,0 +1,741 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Servidor Web en Windows con IIS</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="2eece7f9-70a6-80cc-9c95-daec37ea31a0" class="page sans"><header><img class="page-cover-image" src="microsoft_iis_banner_1500x600_HQ.png" style="object-position:center 48.919999999999995%"/><div class="page-header-icon page-header-icon-with-cover"><img class="icon" src="https://pngimg.com/d/windows_logos_PNG31.png"/></div><h1 class="page-title" dir="auto">Servidor Web en Windows con IIS</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><div style="display:contents" dir="auto"><hr id="2eece7f9-70a6-80cb-83ce-f43adbc481d9"/></div><div style="display:contents" dir="auto"><h1 id="2eece7f9-70a6-80a5-8048-c1e1896d7b9f" class=""><mark class="highlight-blue">Introducción al Servidor Web IIS</mark></h1></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-8093-86f0-ed2124e678aa"><a href="https://learn.microsoft.com/es-es/iis/get-started/introduction-to-iis/iis-web-server-overview" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Introducción al servidor web IIS</div><div class="bookmark-description">El servidor web IIS 7 y versiones posteriores tiene una arquitectura completamente modular que ofrece tres ventajas clave: componentes, extensibilidad e integración de ASP.NET...</div></div><div class="bookmark-href"><img src="https://learn.microsoft.com/favicon.ico" class="icon bookmark-icon"/>https://learn.microsoft.com/es-es/iis/get-started/introduction-to-iis/iis-web-server-overview</div></div><img src="https://learn.microsoft.com/en-us/media/open-graph-image.png" class="bookmark-image"/></a></figure></div><div style="display:contents" dir="auto"><h1 id="2eece7f9-70a6-80dc-a860-f04896dd8d96" class=""><mark class="highlight-blue"><mark class="highlight-default_background">1. Configuración servidor + Instalación Servidor IIS Windows</mark></mark></h1></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-805c-a34e-d528c0f49c6a" class="">Primero de todo tendremos que configurar el Firewall de la máquina para la práctica</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-8097-ab9f-e0b6abf07dce" class="image"><a href="image%2016.png"><img style="width:720px" src="image%2016.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-807c-a6de-d67f3b56c723" class="">En este caso lo dejaremos <strong>Inactivo </strong>pero se recomienda no tocar el estado del firewall.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80c1-9ba5-c002aa727a9a" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80c8-be43-eab7ed376138" class="">A continuación iremos a <strong>Administrador del servidor&gt;Agregar roles y características&gt;Roles de Servidor</strong> para añadir el servidor web</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-8056-9c91-fd905852d254" class="image"><a href="image%2017.png"><img style="width:720px" src="image%2017.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80eb-9f8a-f29096b50301" class="">En pantalla se muestra la opción que debemos escoger, escogeremos la opción <strong>Servidor web (IIS)</strong> para instalar todo lo relacionado con los servicios web.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80ab-ba00-c3761d0837c1" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8075-a9dc-d8bcbc10ee52" class="">Tras el paso anterior tendremos que seleccionar los <strong>servicios de rol</strong> para el Servidor web IIS</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-8053-8cd3-ec8aeffad100" class="image"><a href="image%2018.png"><img style="width:672px" src="image%2018.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80ac-ae90-ed5bf21ff0d8" class="">Aquí tendremos que seleccionar <strong>Servidor FTP</strong> que seleccionará automáticamente los servicios inferiores, además se selecciona automáticamente <strong>Herramientas de administración </strong>y <strong>Consola de administración</strong>.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-806c-9ce0-e2349b602c74" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8072-b927-cad19acf5c1e" class="">Una vez terminemos de configurar los servicios para el Servidor IIS… </p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-8059-ba1a-dc5da8be396c" class="image"><a href="image%2019.png"><img style="width:514.984375px" src="image%2019.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8024-99c5-eee7590ec269" class="">Comenzará a instalarse todos los servicios que hemos seleccionado durante la configuración, tendremos que esperar unos minutos a que termine.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80ca-acf4-d010656c9959" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80ce-b8d2-e984da0ad12c" class="">Una vez tengamos instalado todo correctamente haremos una comprobación en el navegador escribiendo en la barra de búsqueda la dirección <strong><a href="http://localhost">http://localhost</a></strong> viendo la página por defecto de nuestra web</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-8083-b355-f031968a397c" class="image"><a href="image%2020.png"><img style="width:514.984375px" src="image%2020.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80ab-9589-f5fef32142ec" class="">El contenido de nuestra página web se publicará en la carpeta <strong>C:\inetpub\wwwroot</strong> donde subiremos nuestros documentos, carpetas, imágenes…</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8045-87e2-c80f7cf59875" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80c4-af02-e05020cf5059" class="">Comprobamos ahora los servicios activos para poder ver cual es el que nos permite poder publicar y visualizar nuestras páginas web</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-80c5-9ebc-e8cb0449ebff" class="image"><a href="image%2021.png"><img style="width:514.984375px" src="image%2021.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80e0-b5d8-d54256d6699b" class="">Haremos <strong>WIN+R&gt;services.msc&gt;Servicio de publicación de World Wide Web </strong>y como vemos el servicio se ejecuta según se inicia el equipo y comprobamos que está en ejecución.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8030-9336-df303b7c0b66" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-807e-9ecb-f295d91a5c94" class="">Ahora vamos a crear una carpeta <strong>apuntes </strong>para nuestra página web, la cual servirá como una nueva página en la que subiremos los archivos que queramos</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-804d-8322-f443ab07078c" class="image"><a href="image%2022.png"><img style="width:514.984375px" src="image%2022.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80bc-9b73-ff099bdb8dce" class="">En nuestro caso crearemos aquí los documentos <strong>dhcp.txt</strong>, <strong>dns.txt</strong>, <strong>ftp.txt</strong> (vacíos o con contenido, es indiferente) para poder probar que esta nueva sección de la página web muestra los documentos.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8052-bfcb-e29201e4db06" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80d3-9f52-e5a252e5ae89" class="">Ahora haremos lo mismo pero crearemos una carpeta <strong>examenes</strong> para la nueva sección de nuestra página web</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-80f2-b2d0-ff22bbbfdf1c" class="image"><a href="image%2023.png"><img style="width:514.984375px" src="image%2023.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8050-b37b-ea07f1976f2e" class="">También tenemos que crear documentos para la posterior comprobación como <strong>examen_dhcp.txt</strong>, <strong>examen_dns.txt</strong>, <strong>examen_ftp.txt</strong> como se muestra en la captura.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80bf-ab02-f6fd1fb7bf7d" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80b3-9bc7-ccfc70fe42a1" class="">Dentro de la carpeta <strong>examenes</strong> crearemos un archivo <strong>.html</strong> el cual será el “código” de la página web para mostrar el contenido</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-8001-b958-fdfb0cac9d30" class="image"><a href="image%2024.png"><img style="width:514.984375px" src="image%2024.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80e6-819e-e4be91d5eca3" class="">El Servidor IIS va a buscar este archivo <strong>inicio.html</strong> para mostrar su código en pantalla al usuario que busque nuestra página web, pondremos un título sencillo para las comprobaciones.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80d2-b969-efcfdd856768" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80e8-8f06-c66cc15b855f" class="">Haremos lo mismo que hicimos en los pasos anteriores con una carpeta <strong>recuperaciones</strong> como se muestra en la captura</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-8003-adc8-e98bca893534" class="image"><a href="image%2025.png"><img style="width:514.984375px" src="image%2025.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80e8-ae21-c7639d5bbdee" class="">Esta carpeta será parte de la página web como la nueva sección de <strong>recuperaciones</strong>.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80e2-ae70-d003ece14962" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8075-b307-db1c468f997f" class="">Por último como vemos en la captura copiamos los archivos <strong>examen_(…).txt</strong> en esta carpeta <strong>recuperaciones</strong>… </p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-8032-add8-d98279350638" class="image"><a href="image%2026.png"><img style="width:514.984375px" src="image%2026.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8037-ae4b-f766a74a6a9d" class="">Como se muestra ahora en la captura en vez de crear <strong>inicio.html </strong>crearemos el archivo <strong>index.html</strong> para que muestre el contenido de la página web.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8084-adeb-c47fffc8bd25" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2eece7f9-70a6-803f-9b24-f5d93c9ede39"/></div><div style="display:contents" dir="auto"><h1 id="2eece7f9-70a6-80c0-87d0-c78fd28544d7" class=""><mark class="highlight-blue">2. Introducción al Servidor IIS Windows</mark></h1></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-800e-993d-e55ef9cc30d3" class="">.</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-8030-ba29-fed8d2b9ee44" class="image"><a href="image%2027.png"><img style="width:1488px" src="image%2027.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80d8-a05c-fc0b6a06daa7" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8020-8e21-cf453d42a710" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80ab-b4e6-ebce67467c63" class="">.</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-800e-a5b0-e15305f3e06a" class="image"><a href="image%2028.png"><img style="width:1474.984375px" src="image%2028.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-803f-b404-eb9055f1ca4b" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80bf-8cb9-f6e5a65058b4" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80bb-93ee-f295623b1b1c" class="">.</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-8084-97fb-e882240eba39" class="image"><a href="image%2029.png"><img style="width:514.984375px" src="image%2029.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8076-a772-f7cf5924ff57" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80c1-96c0-d1c37173115b" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8000-abbf-facb4dd87c35" class="">.</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-802b-b866-f2f17275170f" class="image"><a href="image%2030.png"><img style="width:514.984375px" src="image%2030.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-801e-9923-eed6a544c344" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80cf-86a5-c472ef5538fe" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80fb-bbaf-f9d9d39323e9" class="">.</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-80fc-91a5-f8242fe2cb79" class="image"><a href="image%2031.png"><img style="width:514.984375px" src="image%2031.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80eb-9354-d2be915d68a8" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-803c-9136-d6af83b63cdb" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8099-8b55-eee592e0caa6" class="">.</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-8043-be84-e4bf3ed3ce32" class="image"><a href="image%2032.png"><img style="width:514.984375px" src="image%2032.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8047-b86d-cd0ce490b320" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-805e-9cd4-c14c1172ddf6" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80ef-a5ba-f06240efdedb" class="">.</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-801e-ba2d-f626c208bb0e" class="image"><a href="image%2033.png"><img style="width:514.984375px" src="image%2033.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8027-b1e8-f85f77cead5a" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-808c-96a4-fef202cab4d2" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8005-9b66-f28b146d5036" class="">.</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-80c4-b468-da2050eb089b" class="image"><a href="image%2034.png"><img style="width:514.984375px" src="image%2034.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-806e-b60d-ebbaa4c62154" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8058-9bf2-f0df5fa97697" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-805b-8310-c9ce9d3823bf" class="">.</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-802c-9e0c-d49c7728f3d4" class="image"><a href="image%2035.png"><img style="width:514.984375px" src="image%2035.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-801a-9d65-e26a8329e18a" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80bf-af7e-f15a2c41cc95" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80dc-86c1-e4e1f2e02e67" class="">Habilitamos <strong>Examen de directorios</strong></p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-806e-8721-cc48036dbf34" class="image"><a href="image%2036.png"><img style="width:514.984375px" src="image%2036.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-800b-9241-f51f0b00c7e4" class="">Por defecto esta función viene por defecto, reiniciamos el Servidor IIS</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80b3-8f72-dff336ff7dd4" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80a2-85c1-de000a60da51" class="">.</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-8015-9ef2-df9562a4ccd8" class="image"><a href="image%2037.png"><img style="width:514.984375px" src="image%2037.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8034-8477-fce52fe648ab" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80b3-8ab5-e1aeb6521cf8" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80aa-a39d-e6b0b3301b74" class="">.</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-80d4-9c2c-f05f89e0c240" class="image"><a href="image%2038.png"><img style="width:514.984375px" src="image%2038.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80b9-a19f-e4aa4f462d6c" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80b1-9b92-fa89d9d7c4ac" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80da-acac-f62f374c21be" class="">Estas son las páginas principales, los archivos de las páginas<br/>que cargan por defecto</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-802d-a5dd-d46e5ee817d8" class="image"><a href="image%2039.png"><img style="width:514.984375px" src="image%2039.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80f0-a122-ebd50cbac1f4" class="">Si no encuentra una, llama a la siguiente</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8030-a8f1-c15ea821277e" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80a9-af10-e9dd0ccdc5f9" class="">.</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-80ea-884c-e4fa337008b4" class="image"><a href="image%2040.png"><img style="width:514.984375px" src="image%2040.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-801a-b399-c7c610633108" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80cc-9563-d23eb25cbdb6" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-807b-b4be-c482c2a03cdf" class="">.</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-80b1-940d-ff047d7fc7ac" class="image"><a href="image%2041.png"><img style="width:514.984375px" src="image%2041.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-808c-836a-f0c5796ad0dd" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8047-bb5e-fd83c801d81c" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8075-a9d0-d1ccff59b749" class="">.</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-8008-85ed-f446ac4f0382" class="image"><a href="image%2042.png"><img style="width:514.984375px" src="image%2042.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80f3-b886-d79ef9a583ae" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8079-823f-ddbc83404acc" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8047-8c06-dc02641661cf" class="">.</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-805d-8d4d-fc9e9f536f27" class="image"><a href="image%2043.png"><img style="width:514.984375px" src="image%2043.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8067-81a5-efa42e7f9511" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80e2-b6dd-c370c0581fa1" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8096-8a5a-cc846ca17579" class="">Al no haber página predeterminada…</p></div><div style="display:contents" dir="ltr"><figure id="2eece7f9-70a6-80e4-93c0-cac067e82097" class="image"><a href="image%2044.png"><img style="width:514.984375px" src="image%2044.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80fd-b534-e0e880f15294" class="">Lista todos los directorios y ficheros que hay dentro, comprobando el <strong>Examen de directorios</strong></p></div><div style="display:contents" dir="auto"><h1 id="2eece7f9-70a6-8076-853a-e12aa64f1b1f" class="">3.<br/>Permisos NTFS</h1></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80fa-9780-ce3434fe91cc" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8081-b12c-e1014d6d9b6b" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8013-b0a4-f6283a38de0a" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80e5-9878-ea3631fb096e" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-802d-bc9c-dc1bf42048ef" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8048-bd9f-db76d677df39" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-803d-89c8-c9edac9732b1" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8074-a67a-ebab9249dfe2" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-807d-aacd-ee2b593db960" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80b5-a5e5-da48dce266f0" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-801e-a1ba-c0feaa838128" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80db-b23f-f86ad29e7c55" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8027-9be7-efe1c1ada544" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-802b-9655-d8a8a204b395" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80b2-91a4-cc4a62a3fedd" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8015-8ded-cc416031cbdc" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8080-b7bd-fe1aa3cc3603" class="">4</p></div><div style="display:contents" dir="auto"><h1 id="2eece7f9-70a6-80eb-9851-dcc3cf7b62ea" class="">4.<br/>Permitir a usuarios subir archivos con FTP para la web</h1></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-800e-9468-e80c13173d36" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8055-b5f1-e07f49d66178" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80a5-b656-f4c238a83630" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8090-a26e-db68907705ed" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8092-81fe-e03600ea6d4d" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8097-9a51-f9b312d4b148" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-807f-92bc-e812409f6717" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8030-bc52-c934bb575a63" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80c9-8a28-ec15a4058fe0" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80dc-940b-c9951ed3c272" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80ed-90be-f2fc58b37c0f" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80db-ba7b-c4de4b31f855" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8019-915a-d97f0453354a" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-802c-aa1a-d570ae26fc14" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-809d-876a-c313aa930a9c" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8065-81a9-d3c5afbb88a2" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80aa-8d68-f16555ca5db9" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8014-a999-d4bb30c8f99f" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80a2-a350-e462e322dbc9" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80fe-83ee-c2a89d971b4c" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8007-aaa4-e7ea07c3cfd9" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8047-a9fc-e255e5ca2769" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80fc-ad97-ec16324aa204" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80a9-af8c-c436a8499b04" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80a2-b3c7-c0c057451a34" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-804c-8d17-e8a658ee973b" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80a2-92a9-e24e25f72772" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8077-a3b5-e89b8cc2367c" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80da-aabb-fa24d0f44a6f" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8005-a991-ce871bb1db9f" class="">.</p></div><div style="display:contents" dir="auto"><h1 id="2eece7f9-70a6-80fd-91fe-d2ca480e243c" class="">5. Creación de segundo sitio + cambio de puertos</h1></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-808d-b286-e94cb6ac40c4" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8050-8651-c388dd302a62" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-800b-ace1-d008174cb3d8" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8057-b65f-d6cf29af3908" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8082-82e0-dbe58f6759ce" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8092-837c-ea074739ea84" class="">a</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8010-a422-eef30b837d63" class="">visará<br/>de que está el puerto ocupado</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-808d-99bb-d6ebef3a0bd4" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80a9-b819-e3a9a51a8821" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8046-82aa-f196134f6082" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80e3-9570-c5af3e3a39c7" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80ad-a1f5-d9a852453ffb" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8043-bdf1-ff11a70acf53" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8091-b822-e35796a22877" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-804f-9c17-cdc2b3657161" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8021-bb4e-c1cae02c248a" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8020-821b-e6ad555123c6" class="">.</p></div><div style="display:contents" dir="auto"><h1 id="2eece7f9-70a6-803b-aa49-ffb2b640a671" class="">6.<br/>Segundo sitio por DNS</h1></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80db-9989-cc8d79afda8a" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80f6-a511-db215f30e086" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80ea-89b1-e6157f238fce" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-804e-9062-e3aab7f324b6" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-801d-b4e8-db8c4591b745" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8050-9bc0-dca868c88e90" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-803b-99f3-dea06640d686" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80c5-85d1-c49300ab0863" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80f1-8e13-db89dd2ee2cc" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-801e-814a-e3a996589133" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80ba-be8d-c10849066672" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8041-b921-ffcb9afc7d71" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8019-b6dd-effe8b1a819c" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-808d-b4a7-f66b9f6b04f9" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-801b-9338-cada9b58ff12" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80bf-a74c-c82a52c0b51c" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8048-a2f4-f558c105daa8" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8077-980f-f37d3f5bff86" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80e2-8709-f6c4757ac822" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80a1-bd42-c142a31f589a" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-807e-9970-d5f70d1c1409" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80f2-a368-c4a9333cbdbc" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8011-a893-d11ef3f1425e" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8054-9b07-f41b0ba4100d" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80b1-b687-e15660863060" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8022-82ea-f0515aa9c9e0" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80f7-8034-cce01f6a9d4c" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8070-af1d-c0ade27c1821" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8075-bf22-d341dcbb0a5f" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8064-b5f9-cafd70d766a8" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8017-8e3f-c9bb3e61711f" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-801c-87db-e959ea444e29" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8012-bd6b-c654365f25fe" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80a2-a532-c7ed1777d0b8" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80d5-8bef-df9c8b7a2520" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8058-ad07-ea34aeb1aa54" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80b4-8664-da03652d6e6a" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80e3-9a15-e71987d25ce0" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80da-8d33-d4e1361b76eb" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8070-a582-d625312072ed" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80a0-9a79-d5d32b46fc77" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-806a-a6cf-e95fab989164" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8099-90b4-cd84f3d681e5" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-800d-aeff-fe6086bef6b3" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8006-910a-c489e29f300e" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80b6-af2d-e3d551ba86e4" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8034-a536-f62c22107bb2" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8087-9820-f8f4c68bf717" class="">.</p></div><div style="display:contents" dir="auto"><h1 id="2eece7f9-70a6-8042-8495-f6647f3be1b4" class="">7.<br/>Aplicaciones - introducción</h1></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8051-a0a0-eda5faea6ba0" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80f7-b5d1-f11992140cae" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8023-b181-d9852e90b37d" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80f5-ac26-f8916f7b500f" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80dd-a2ca-dc657235ca1b" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80cd-8645-d4226deea826" class="">.</p></div><div style="display:contents" dir="auto"><h1 id="2eece7f9-70a6-80a4-bf22-e4cf9bac3adf" class="">8. Servidor de aplicaciones</h1></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8054-90a3-edeb9589ecf8" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80f4-b846-df4eb8837414" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8008-ab5d-cdbdaa7c5108" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80d3-b44f-dedaed16173f" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80b2-a320-fd7b97b47e5d" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8026-9499-ed93fe14245f" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8099-8533-e5b6cc24daf8" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8087-b0aa-f204dec4db30" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-805e-aac5-ea11b8424786" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80a2-bee5-c4d212c1c39c" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80c2-880a-d0be70d4a2a6" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-808a-aba8-ca0327f23b3e" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8060-9b77-f2ea143b7638" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80c4-9969-dd3a6c9d43f5" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80ba-a662-fc68dc9d98a6" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-808a-8e76-e00e4997e2b0" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80a1-8945-d876baef6d95" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8028-ad9d-da72c0d91954" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8079-bc0e-ce32249520e1" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-806e-a817-eca96e6088b8" class="">.</p></div><div style="display:contents" dir="auto"><h1 id="2eece7f9-70a6-8000-b959-ce242a1c6891" class="">8.<br/>Restricciones</h1></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80be-a04b-f83ec498f69a" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8028-b3ff-e11801e6fd8d" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-808e-9625-f8ae5f34254b" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-807f-a5f5-cc5536a100e8" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-805b-ba9d-cd6e9fa37a74" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80ba-86cf-ff5163bd97e8" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80c5-9339-e5b89b915d42" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8078-b6b2-e235313c8d62" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8079-b740-d409b742a31f" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8046-a88c-f1cde3fa7a3a" class="">R</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8025-a20e-c34e25b80757" class="">einiciamos<br/>el sitio.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8088-9578-fa4e0b799b7a" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8014-b375-fd8319808d81" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-805f-99d3-f7ffa62a0e3c" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80e4-ad19-c37839d1d740" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80de-8c96-c2e3731c8bf0" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-800f-b5f6-e8b1fb12985e" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8095-9a8e-e971cfc0fa25" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80b1-91ea-cb3b5ffda9cb" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-803c-9678-ce24bfdd68ab" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80dd-9c61-e00153811b3d" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-800e-9a15-f50ae313f3db" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8064-9898-ef589ddc2695" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-801e-b10a-c46f3accc4d7" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80dd-8b8d-c6b1e1dbe783" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8051-a7e8-f79f56bbcced" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-801a-9ddc-c6fe33ca5cdc" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8008-b04b-eb6701de9a6f" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8039-99cf-dd3992a97719" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80c0-baa7-c66be09238da" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8036-b0de-c8742f1bf5f6" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80cc-8d4a-e9bbb6b8e30a" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8025-af80-e183c66aa33d" class="">.</p></div><div style="display:contents" dir="auto"><h1 id="2eece7f9-70a6-80f4-9c43-f2f50b9fe734" class="">9. PHP</h1></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80f8-a4df-e73757350011" class="">Instalamos php de la página oficiakl</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-801d-b048-d3a197bcb332" class=""><span style="border-bottom:0.05em solid">D<br/>escomprimir<br/>el archivo de PHP en la ruta C:\php8</span></p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8041-8b75-ec849f86bc4f" class="">Vamos al IIS&gt;Asignación de<br/>controladores</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-805b-a86b-f7582de0e25a" class="">B</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8089-82aa-cbbfee9ac659" class="">uscamos<br/>Agregar asignación de módulo&gt;Ruta de<br/>acceso(</p></div><div style="display:contents" dir="auto"><ul id="2eece7f9-70a6-8007-9be4-d438542a21cd" class="bulleted-list"><li style="list-style-type:disc">.php</li></ul></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8045-9793-e009a1427d12" class="">)&gt;Módulo(FastCgiModule)&gt;Ejecutable(C:\php8\php-cgi.exe)&gt;PHP<br/>8</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8055-883a-f68918230fe5" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8089-8dd2-e0aaeee3a439" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80f2-a4e9-cf0fe0b9b26b" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80b1-9b70-fd750108592b" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8088-bcf7-eb5bccd7456b" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-802d-b7c8-f61976c88a89" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80cd-9b96-c802ffd588b0" class="">Comprobamos el script php</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8001-9811-f34f91aaaeef" class="">I</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-800e-a005-de31a170c60e" class="">remos<br/>a C:\inetpub\wwwroot\scripts\proba.php para comprobar desde bloc de<br/>notas el código.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80ee-b887-ca4f7f88626d" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80cb-bee9-f0c5e844bc39" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8083-beca-fb1411e00624" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80fc-afba-e8c805b1afc4" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80bf-9865-c68eb84b9e62" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80b7-808f-d597d5125342" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8051-a056-c899d936b133" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8072-94bf-c81c29d20378" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8053-ade9-d919886b07c5" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80f0-849e-f4223bd5f64d" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80ab-9227-f814e963611a" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8067-8703-f97c7dff9d63" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-8002-9467-e2645a97b4f0" class="">.</p></div><div style="display:contents" dir="auto"><p id="2eece7f9-70a6-80e6-9558-f22168f03ff2" class="">.</p></div></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

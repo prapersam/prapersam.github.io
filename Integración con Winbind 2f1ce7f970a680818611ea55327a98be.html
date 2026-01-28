@@ -1,0 +1,899 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Integración con Winbind</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="2f1ce7f9-70a6-8081-8611-ea55327a98be" class="page sans"><header><img class="page-cover-image" src="https://images.unsplash.com/photo-1637094408647-0d81d08f81b5?ixlib=rb-4.1.0&amp;q=85&amp;fm=jpg&amp;crop=entropy&amp;cs=srgb" style="object-position:center 50%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">🧩</span></div><h1 class="page-title" dir="auto">Integración con Winbind</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><div style="display:contents" dir="auto"><h1 id="2f1ce7f9-70a6-8059-bc23-dc1088942f63" class="">1. Introducción</h1></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80cd-b578-e2a7daeae334" class=""><strong>Winbind</strong> es un componente de Samba que permite a un sistema Linux integrarse con dominios Windows, como Active Directory o Windows NT, para la <strong>autenticación </strong>y <strong>resolución</strong> de usuarios y grupos. Permite que los usuarios y grupos de un dominio sean reconocidos como usuarios nativos de Linux, facilitando el acceso a recursos compartidos y la gestión unificada de cuentas.</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8060-8978-d522800bbe63" class="">Funciona mediante la integración con dos servicios clave del sistema Linux:</p></div><div style="display:contents" dir="auto"><ul id="2f1ce7f9-70a6-80d0-9770-f4ed2e2149b9" class="bulleted-list"><li style="list-style-type:disc"><strong>NSS (Name Service Switch)</strong>: permite resolver nombres de usuarios y grupos desde el controlador de dominio como si fueran locales.</li></ul></div><div style="display:contents" dir="auto"><ul id="2f1ce7f9-70a6-80a4-a539-d078f52fe576" class="bulleted-list"><li style="list-style-type:disc"><strong>PAM</strong> <strong>(Pluggable	Authentication Modules)</strong> el cual no es el tema a tratar en este manual pero sirve para la autenticación de usuarios permitiendo sesiones de inicio de sesión.</li></ul></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-808d-b7ae-e325b94bc66e" class="image"><a href="image%2053.png"><img style="width:528px" src="image%2053.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-807e-97ef-e51bf18117c4" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2f1ce7f9-70a6-809a-8bb6-ed6fe1a0da12"/></div><div style="display:contents" dir="auto"><h1 id="2f1ce7f9-70a6-80f5-84f2-ea4726b235e2" class="">2. Objetivos del manual</h1></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80a2-97a1-c15965095cd4" class="">El objetivo de este manual es documentar y explicar el proceso de <strong>integración de un sistema Linux en un dominio mediante Samba y Winbind</strong> de forma que los usuarios y grupos de Active Directory sean reconocidos como usuarios locales del sistema. De forma concreta, perseguiremos los siguientes objetivos:</p></div><div style="display:contents" dir="auto"><ul id="2f1ce7f9-70a6-806b-b274-c1cfc5d1637b" class="bulleted-list"><li style="list-style-type:disc"><strong>Comprender el funcionamiento de Winbind dentro de Samba.</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="2f1ce7f9-70a6-80f6-a86b-edf5a8fd70e5" class="bulleted-list"><li style="list-style-type:disc"><strong>Resolver problemas de integración relacionados con la resolución de usuarios y grupos de dominio.</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="2f1ce7f9-70a6-8098-a50f-f01bb872c5b0" class="bulleted-list"><li style="list-style-type:disc"><strong>Configurar correctamente el sistema NSS para que Linux consulte Active Directory.</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="2f1ce7f9-70a6-8097-b7e2-d44497d5e0f7" class="bulleted-list"><li style="list-style-type:disc"><strong>Verificar la correcta integración mediante herramientas como wbinfo y getent.</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="2f1ce7f9-70a6-8004-8464-d304e0cf63f8" class="bulleted-list"><li style="list-style-type:disc"><strong>Automatizar las comprobaciones mediante scripts para facilitar la administración y documentación del sistema.</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="2f1ce7f9-70a6-80a1-8f99-ed5f347a5688" class="bulleted-list"><li style="list-style-type:disc"><strong>Proporcionar una solución reutilizable y replicable en otros entornos Linux empresariales.</strong></li></ul></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8070-b691-f0650227c87f" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2f1ce7f9-70a6-804b-b4ec-df4211460bcc"/></div><div style="display:contents" dir="auto"><h1 id="2f1ce7f9-70a6-80d2-8bfb-d2dfe32904bb" class="">3. Solución manual del error</h1></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8052-8e79-ca97b9a18be6" class="">Comenzaremos localizando las librerías de <strong>winbind </strong>para la integración con <strong>Samba</strong></p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-804c-8b51-e20c7a5b221f" class="image"><a href="image%2054.png"><img style="width:1714.96875px" src="image%2054.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80dd-9171-e00a45054ece" class="">Ejecutamos <strong>find /usr/local/samba -name “libnss_winbind*” 2&gt;/dev/null </strong>como se muestra en la captura debemos ver las librerías en los directorios <strong>/usr/local/samba/lib</strong></p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8040-bdb2-cba2af5b4941" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-805e-a820-f1d307c426ac" class="">A continuación establecemos <strong>enlaces simbólicos </strong>de las librerías en la ruta estándar del sistema</p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-807e-8a76-f578d98fff39" class="image"><a href="image%2055.png"><img style="width:754.96875px" src="image%2055.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80a7-9d18-f3c588e40ef4" class="">Para ello ejecutamos los comandos <strong>ln /usr/local/samba/lib/libnss_winbind.so /lib64/libnss_winbind.so </strong>y haremos lo mismo con la segunda librería de winbind como se muestra.</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8097-86ea-f0fbec1e8e13" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80a1-ac2f-db92dca813aa" class="">Recargamos ahora las librerías para aplicar los cambios que acabamos de realizar</p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-800a-bb38-fb76f251dd65" class="image"><a href="image%2056.png"><img style="width:754.96875px" src="image%2056.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-802a-b5d5-c9cccc6e9a78" class="">Ejecutamos el comando <strong>ldconfig </strong>y comprobamos con el comando <strong>ldconfig -p | grep winbind</strong></p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8085-a122-d9faf6c1a1c2" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8003-8ba7-d2f8f2cd5186" class="">Configuramos el sistema<strong> NSS </strong>para la resolución de usuarios y grupos de dominio desde <strong>/etc/nsswitch.conf</strong></p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-804b-9a65-d4c0658b662c" class="image"><a href="image%2057.png"><img style="width:754.96875px" src="image%2057.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8042-89b6-f0bdcc29291f" class="">Como se muestra en la captura cambiamos en <strong>passwd, group y shadow </strong>el <strong>files winbind</strong></p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80e1-a66a-fe8b0a85fb02" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8032-984e-d5cc19e67bca" class="">Comprobamos al terminar que se aplicaron los cambios en el sistema NSS</p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-80bb-b5ba-c96a4adcf5a8" class="image"><a href="image%2058.png"><img style="width:754.96875px" src="image%2058.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80b3-a620-e63d7da0445f" class="">Al ejecutar el comando <strong>grep -E “^(passwd|group|shadow)” /etc/nsswitch.conf </strong>debemos ver la salida que se muestra en pantalla, exactamente los cambios que hemos realizado anteriormente.</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-800c-bd66-cac49d1ed469" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8008-b7ea-ce4fee50b182" class="">Si es necesario pararemos servicios y los eliminaremos para que no choquen con el winbind</p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-80d5-aa9c-f5270568707f" class="image"><a href="image%2059.png"><img style="width:754.96875px" src="image%2059.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8094-ac24-f217b4aefa0b" class="">Debemos quitar <strong>SSSD</strong>, ejecutamos <strong>systemctl stop sssd</strong>, <strong>systemctl disable sssd </strong>y por último borramos el servicio sssd con el comando <strong>dnf remove -y sssd</strong></p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80c9-b06c-ce15798ad4e1" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8014-9351-ceebc6412bc8" class="">Haremos los mismo que hicimos en el paso anterior pero esta vez con el servicio <strong>nscd</strong></p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-8060-8203-ee83535311c2" class="image"><a href="image%2060.png"><img style="width:754.96875px" src="image%2060.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80c5-98c6-dfd223f89d42" class="">Al ejecutar los comandos nos saldrá que directamente el servicio no está instalado en el servidor.</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8060-819c-f48eaca11e2c" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80bc-83c3-c502e712d39e" class="">A continuación debemos hacer cambios en el <strong>/etc/samba/smb.conf </strong>para la correcta integración</p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-80f1-bc8e-cd98765c3f31" class="image"><a href="image%2061.png"><img style="width:754.96875px" src="image%2061.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8096-9a35-db0db98930f3" class="">Debemos introducir las siguientes líneas dentro de <strong>[global] </strong>las cuales explico a continuación:</p></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2f1ce7f9-70a6-8034-ab69-eb13d2a2b0c5" class="code code-wrap"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">winbind use default domain = yes #Permite que los usuarios del dominio puedan referenciarse sin indicar el nombre del dominio completo, en vez de poner DOMINIO\usuario pondrá usuario.
+
+# Habilitan la enumeración de usuarios y grupos del dominio permitiendo a los comandos como wbinfo -u wbinfo -g y getent passwd que muestren correctamente la información.*
+winbind enum users = yes
+winbind enum groups = yes
+winbind expand groups = 4 #Permite expandir grupos anidados hasta una profundidad de 4 niveles.
+
+# Define el sistema de mapeo de identificadores.
+
+idmap config * : backend = tdb
+idmap config * : range = 10000-99999
+
+# Soporte de ACLs de Windows sobre Linux, compatibilidad con permisos NTFS y gestión correcta de atributos de archivos en entornos mixtos o heterogéneos.
+vfs objects = acl_xattr
+map acl inherit = yes
+store dos attributes = yes
+unix extensions = no</code></pre></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80d8-9930-f8240c6f3ca1" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8093-a33b-f743af9a0de0" class="">Tras editar como se indica el <strong>/etc/samba/smb.conf </strong>debemos aplicar los cambios</p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-809c-b49d-c1167698c932" class="image"><a href="image%2062.png"><img style="width:754.96875px" src="image%2062.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80bc-9999-d82a499d1378" class="">Los cambios se aplicarán al reiniciar el servicio Samba, por tanto debemos ejecutar el comando <strong>systemctl restart samba-dc </strong>luego esperamos 15 segundos a que cargue bien con <strong>sleep 15</strong></p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80a7-b20d-db77d7773912" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8091-977b-fd9b3c079afb" class="">Hacemos las comprobaciones de que integramos correctamente usuarios y grupos</p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-80c5-97fc-fff0ed4459cf" class="image"><a href="image%2063.png"><img style="width:754.96875px" src="image%2063.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80e3-8979-d68d2649d6a4" class="">Para ello ejecutamos primero el comando <strong>wbinfo -t </strong>para verificar relaciones de confianza, luego <strong>wbinfo -u </strong>para listar usuarios y por último <strong>wbinfo -g </strong>para listar grupos.</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8078-8921-f9d4d2888b32" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80ec-8b3c-c5a22ea93e3e" class="">Ahora haremos la misma comprobación de correcta integración con el comando <strong>getent</strong></p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-804e-a1c8-c08592167bb7" class="image"><a href="image%2064.png"><img style="width:754.96875px" src="image%2064.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-804e-9317-eaecf6da1b77" class="">Primero comprobamos que el usuario <strong>lupi06 </strong>se integró correctamente ejecutando el comando <strong>getent passwd lupi06</strong>, el cual muestra correctamente con su UID, GID y home. Además comprobamos el grupo <strong>g-usuarios </strong>con el comando <strong>getent group g-usuarios.</strong></p></div><div style="display:contents" dir="ltr"><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="2f1ce7f9-70a6-803d-8bf3-d1f83a4eb8be"><div style="font-size:1.5em"><span class="icon">ℹ️</span></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-809e-9475-dec37cc8507a" class="">Si ejecutamos el comando <strong>getent passwd </strong>y el comando <strong>getent group</strong> no se listarán directamente todos los usuarios y grupos, cosa que no pasa en CentOS 7. Pero esto no significa que no los reconozca como podemos ver, en el siguiente apartado veremos como solucionar este problema a través de dos scripts que “simulan” esos dos comandos mencionados.</p></div></div></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-803a-978d-e4fbde4b6c1e" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2f1ce7f9-70a6-801d-9250-d0d03d854b45"/></div><div style="display:contents" dir="auto"><h1 id="2f1ce7f9-70a6-8094-8331-e7bd768d915c" class="">4. Solución automatizada mediante scripting</h1></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8062-9e5c-ed56497fd12c" class="">A través de todos las instrucciones realizadas hice el script <strong>29_nsswitchcentos8_prapersam.sh</strong></p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-8030-a15b-c08cbe3620be" class="image"><a href="image%2065.png"><img style="width:754.96875px" src="image%2065.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-802f-876e-d94dec0a9494" class="">Como se muestra lo ejecuto en el servidor, y podemos ver hasta la parte de parar y borrar servicios.</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8076-832e-f8aa7d6bb93c" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80b7-96a3-ed8cb12e5056" class="">Tras la captura anterior continuará con las comprobaciones de lacorrecta integración…</p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-80bd-ba8a-c76c9a2ce721" class="image"><a href="image%2066.png"><img style="width:754.96875px" src="image%2066.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8055-b116-f0009f02724d" class="">Y como vemos es efectivo e integra correctamente todo.</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80da-bd06-e2002415e660" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80c5-8376-e854a258e19e" class="">Ejecutamos el script como <strong>./29_1_getent_passwd.sh | teegetentpasswd_prapersam.txt</strong></p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-80d0-a614-c1e8c215eb0e" class="image"><a href="image%2067.png"><img style="width:754.96875px" src="image%2067.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80c6-ad9c-ccc1eba5a9bc" class="">Tal y como se ejecuta el script nos permite meterlo en el archivo <strong>getentpasswd_prapersam.txt </strong>a la vez que vemos lo que se está guardando en él.</p></div><div style="display:contents" dir="ltr"><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="2f1ce7f9-70a6-800a-b076-e4def2a3282e"><div style="font-size:1.5em"><span class="icon">ℹ️</span></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80c1-ae9a-d9a52fe0215d" class="">El script obtiene la lista de usuarios del dominio, consulta sus atributos UNIX (UID, GID, directorio home y shell) y muestra la información en formato tabulado.</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8056-aa5c-eaacd04421e8" class="">Su objetivo es <strong>verificar que el mapeo de identidades funciona correctamente</strong> y que los usuarios del dominio pueden ser utilizados en servicios Linux, además de generar un registro del resultado para su documentación.</p></div></div></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80ec-ac24-ebfda7d99365" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80b0-a77e-d8217d28ec7d" class="">Comprobamos el archivo <strong>getentpasswd_prapersam.txt</strong></p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-808b-aa35-cc94a316d0d8" class="image"><a href="image%2068.png"><img style="width:754.96875px" src="image%2068.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80ff-a059-fa9d6110adf1" class="">Como vemos en la captura muestra exactamente lo que se veía en el servidor anteriormente.</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8005-94ca-e6d9e925dea1" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80db-a4d7-c74b0423c29d" class="">Ahora ejecuto el script <strong>./29_2_getent_group.sh | tee getentgroup_prapersam.txt</strong></p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-80ad-9b62-e451dd5848d8" class="image"><a href="image%2069.png"><img style="width:754.96875px" src="image%2069.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80b9-8032-d26a70047939" class="">Tal y como se ejecuta el script nos permite meterlo en el archivo <strong>getentgroup_prapersam.txt </strong>a la vez que vemos lo que se está guardando en él.</p></div><div style="display:contents" dir="ltr"><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="2f1ce7f9-70a6-8078-b58f-ddc17717c860"><div style="font-size:1.5em"><span class="icon">ℹ️</span></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8039-94a5-cb77dfc289e4" class="">Este script se utiliza para <strong>listar los grupos del dominio Active Directory reconocidos por el sistema Linux</strong>, mostrando su identificador de grupo (GID) y los usuarios que pertenecen a cada<br/>uno de ellos.</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80c3-b835-f72865ee083d" class="">El script consulta la información de los grupos del dominio y presenta los datos de forma estructurada, permitiendo <strong>verificar que el mapeo de grupos y la pertenencia de usuarios funciona correctamente</strong> tras la integración con Samba y Winbind.</p></div></div></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80f5-ba0e-ffa57e7b8c2e" class="">
+</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8029-893a-d2af329b89ce" class="">Comprobamos el archivo <strong>getentgroup_prapersam.txt</strong></p></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-80d2-b28c-cd10defebb63" class="image"><a href="image%2070.png"><img style="width:754.96875px" src="image%2070.png"/></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-809b-b327-db6b2209b218" class="">Como vemos en la captura muestra exactamente lo que se veía en el servidor anteriormente.</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8047-a6f7-d81c73e9f99d" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2f1ce7f9-70a6-808d-ba37-eef776c69e18"/></div><div style="display:contents" dir="auto"><h1 id="2f1ce7f9-70a6-80e3-890c-c6d20e5aeadf" class="">Conclusiones</h1></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80d3-ab1d-f79a15b529e6" class="">Tras la realización de este manual de usuario puedo concluir que la integración de un sistema Linux en un dominio mediante Samba y Winbind es una solución eficaz y estable para la gestión centralizada de usuarios y grupos en entornos heterogéneos. A lo largo del manual hemos demostrado cómo el sistema Linux es capaz de reconocer usuarios y grupos del dominio como si fueran locales, permitiendo su uso en servicios y recursos del sistema.</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80a9-b4e1-c7e7b5b3eff7" class="">Además, hemos creado scripts de verificación que permite automatizar las comprobaciones de la correcta integración, facilitando la visualización de errores y administración del sistema. Este manual es especialmente útil en entornos empresariales donde conviven sistemas Windows y Linux, mejorando la seguridad, administración y escalabilidad de la infraestructura.</p></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80d1-870a-e564e378dc5b" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2f1ce7f9-70a6-8097-8e5b-d83abbd721ea"/></div><div style="display:contents" dir="auto"><h1 id="2f1ce7f9-70a6-80fc-9b4e-fac8580f4005" class="">Bibliografía</h1></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-8006-b02d-f3b3a91d6c66"><a href="http://sudo.es/docnux/samba/interoperatividad/html/ch05s04.html" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Autentificación en los clientes Linux</div><div class="bookmark-description">En la “Implementación de un dominio Linux con OpenLDAP” se explica cómo es
+  posible configurar un sistema Linux como cliente LDAP. Esta sección
+  recuerda los princpales conceptos relacionados e introduce las
+  peculiaridades que aparecen cuando el sistema Linux debe ser cliente
+  de un servidor LDAP Windows (es decir, de un servicio de Directorio
+  Activo).</div></div><div class="bookmark-href">http://sudo.es/docnux/samba/interoperatividad/html/ch05s04.html</div></div></a></figure></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-80c6-b52f-ebdbb7912f98"><a href="https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/system-level_authentication_guide/winbind-auth" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">3.4. Winbind | System-Level Authentication Guide | Red Hat Enterprise Linux | 7 | Red Hat Documentation</div></div><div class="bookmark-href"><img src="https://docs.redhat.com/favicon.ico" class="icon bookmark-icon"/>https://docs.redhat.com/en/documentation/red_hat_enterprise_linux/7/html/system-level_authentication_guide/winbind-auth</div></div></a></figure></div><div style="display:contents" dir="ltr"><figure id="2f1ce7f9-70a6-8006-87d7-e91141f7dbbe"><a href="https://community.linuxmint.com/software/view/winbind" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Linux Mint - Community</div></div><div class="bookmark-href"><img src="https://community.linuxmint.com/favicon.ico" class="icon bookmark-icon"/>https://community.linuxmint.com/software/view/winbind</div></div></a></figure></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-809a-a4fd-df14994812e0" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2f1ce7f9-70a6-8001-a49e-d112ee5add14"/></div><div style="display:contents" dir="auto"><h1 id="2f1ce7f9-70a6-80f9-b1d5-fa2258c252b6" class="">Scripts</h1></div><div style="display:contents" dir="auto"><h2 id="2f1ce7f9-70a6-8069-8701-d45938d8a46d" class="">29_nsswitchcentos8_prapersam.sh</h2></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2f1ce7f9-70a6-80b1-8e29-f7db17f95a4d" class="code code-wrap"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">#!/bin/bash
+# prapersam
+
+source ./00_variables_prapersam.sh
+
+clear
+
+echo &quot;===========================================&quot;
+echo &quot;==|   CONFIGURACIÓN WINBIND (GETENTS)   |==&quot;
+echo &quot;==|             PRAPERSAM               |==&quot;
+echo &quot;===========================================&quot;
+
+echo &quot;[*] Buscamos el servicio Winbind en el servidor &quot; 
+
+RUTA=$(find /usr/local/samba -name &quot;libnss_winbind*&quot; 2&gt;/dev/null)
+if [ -n &quot;$RUTA&quot; ]; then
+    echo &quot;El servicio está en la ruta: &quot;
+    echo &quot;$RUTA&quot;
+else
+    echo &quot;No se encontró el servicio en el servidor&quot;
+fi
+
+echo &quot;[*] Establecemos enlaces simbólicos para su correcto funcionamiento&quot; 
+ln -s /usr/local/samba/lib/libnss_winbind.so /lib64/libnss_winbind.so
+ln -s /usr/local/samba/lib/libnss_winbind.so.2 /lib64/libnss_winbind.so.2
+ldconfig
+ldconfig -p | grep winbind
+
+echo &quot;[IMPORTANTE] Editamos el /etc/nsswitch.conf que apunte a Winbind&quot;
+sed -i &#x27;s/^passwd:.*/passwd: files winbind/&#x27; /etc/nsswitch.conf
+sed -i &#x27;s/^group:.*/group: files winbind/&#x27;  /etc/nsswitch.conf
+sed -i &#x27;s/^shadow:.*/shadow: files winbind/&#x27; /etc/nsswitch.conf
+grep -E &quot;^(passwd|group|shadow)&quot; /etc/nsswitch.conf
+
+echo &quot;Desactivamos servicios innecesarios que podrían interferir&quot;
+systemctl stop sssd 2&gt;/dev/null || true
+systemctl disable sssd 2&gt;/dev/null || true
+dnf remove -y sssd 2&gt;/dev/null || true
+
+systemctl stop nscd 2&gt;/dev/null || true
+systemctl disable nscd 2&gt;/dev/null || true
+dnf remove -y nscd 2&gt;/dev/null || true
+
+echo &quot;[IMPORTANTE] Editamos /etc/samba/smb.conf para listar correctamente&quot;
+cat &lt;&lt; EOF &gt; /etc/samba/samba/smb.conf
+[global]
+    netbios name = $HOSTNAME_SERVER
+    server role = active directory domain controller
+    workgroup = $NOMBRE_DOMINIO_MAYUS
+    realm = $REALM
+
+    dns forwarder = 8.8.8.8
+    ldap server require strong auth = no
+    allow dns updates = nonsecure
+
+    idmap_ldb:use rfc2307 = yes
+
+    winbind use default domain = yes
+    winbind enum users = yes
+    winbind enum groups = yes
+    winbind expand groups = 4
+
+    idmap config * : backend = tdb
+    idmap config * : range = 10000-99999
+
+    vfs objects = acl_xattr
+    map acl inherit = yes
+    store dos attributes = yes
+    unix extensions = no
+    
+[netlogon]
+   path = /usr/local/samba/var/lib/samba/sysvol/$DOMINIO/scripts
+   read only = no
+
+[sysvol]
+   path = /usr/local/samba/var/lib/samba/sysvol
+   read only = no
+EOF
+
+echo &quot;Limpiamos caché de Samba&quot;
+rm -f /var/cache/samba/*.tdb
+rm -f /var/lib/samba/*.tdb
+rm -f /usr/local/samba/var/*.tdb
+
+echo &quot;Reiniciamos el servicio samba-dc&quot;
+systemctl restart samba-dc
+sleep 15
+
+echo &quot;Comprobamos Winbind&quot;
+/usr/local/samba/bin/wbinfo -t
+/usr/local/samba/bin/wbinfo -u | head
+/usr/local/samba/bin/wbinfo -g | head
+
+echo &quot;Hacemos pruebas de getent&quot;
+getent passwd | head
+getent group  | head
+
+echo &quot;Probamos con un usuario específico&quot;
+getent passwd lupi06</code></pre></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-80a5-bd2e-dc6051885b76" class="">
+</p></div><div style="display:contents" dir="auto"><h2 id="2f1ce7f9-70a6-804e-9bc0-d0bf1accac3a" class="">29_1_getent_passwd_prapersam.sh</h2></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2f1ce7f9-70a6-8047-b9d5-dde2ce78f433" class="code code-wrap"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">#!/bin/bash
+# prapersam ./29_1_getent_passwd.sh | tee getentpasswd_prapersam.txt
+
+printf &quot;%-25s %-6s %-6s %-35s %s\n&quot; &quot;USUARIO&quot; &quot;UID&quot; &quot;GID&quot; &quot;HOME&quot; &quot;SHELL&quot;
+printf &quot;%-25s %-6s %-6s %-35s %s\n&quot; &quot;-------&quot; &quot;---&quot; &quot;---&quot; &quot;----&quot; &quot;-----&quot;
+
+samba-tool user list | while read -r u; do
+
+    # CERRAMOS STDIN PARA EVITAR BUCLE
+    info=$(samba-tool user show &quot;$u&quot; &lt;/dev/null 2&gt;/dev/null)
+
+    uid=$(echo &quot;$info&quot;   | awk -F&#x27;: &#x27; &#x27;/uidNumber/ {print $2}&#x27;)
+    [ -z &quot;$uid&quot; ] &amp;&amp; continue
+
+    gid=$(echo &quot;$info&quot;   | awk -F&#x27;: &#x27; &#x27;/gidNumber/ {print $2}&#x27;)
+    home=$(echo &quot;$info&quot;  | awk -F&#x27;: &#x27; &#x27;/unixHomeDirectory/ {print $2}&#x27;)
+    shell=$(echo &quot;$info&quot; | awk -F&#x27;: &#x27; &#x27;/loginShell/ {print $2}&#x27;)
+
+    [ -z &quot;$gid&quot; ]   &amp;&amp; gid=&quot;$uid&quot;
+    [ -z &quot;$home&quot; ]  &amp;&amp; home=&quot;/home/$u&quot;
+    [ -z &quot;$shell&quot; ] &amp;&amp; shell=&quot;/bin/false&quot;
+
+    printf &quot;%-25s %-6s %-6s %-35s %s\n&quot; &quot;$u&quot; &quot;$uid&quot; &quot;$gid&quot; &quot;$home&quot; &quot;$shell&quot;
+
+done</code></pre></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8010-934a-e3bfa8836fc7" class="">
+</p></div><div style="display:contents" dir="auto"><h2 id="2f1ce7f9-70a6-80bc-b67a-f893323ec2a5" class="">29_2_getent_group_prapersam.sh</h2></div><div style="display:contents" dir="auto"><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="2f1ce7f9-70a6-8011-858d-d15d88aaa95f" class="code code-wrap"><code class="language-Shell" style="white-space:pre-wrap;word-break:break-all">#!/bin/bash
+# prapersam
+
+printf &quot;%-25s %-8s %s\n&quot; &quot;GRUPO&quot; &quot;GID&quot; &quot;MIEMBROS&quot;
+printf &quot;%-25s %-8s %s\n&quot; &quot;-----&quot; &quot;---&quot; &quot;--------&quot;
+
+for g in $(samba-tool group list | grep &#x27;^g-&#x27;); do
+    # Obtener GID (RFC2307)
+    gid=$(samba-tool group show &quot;$g&quot; 2&gt;/dev/null | awk &#x27;/gidNumber/ {print $2}&#x27;)
+
+    # Si no tiene gidNumber, lo marcamos
+    [ -z &quot;$gid&quot; ] &amp;&amp; gid=&quot;N/A&quot;
+
+    # Obtener miembros reales del AD
+    members=$(samba-tool group listmembers &quot;$g&quot; 2&gt;/dev/null | tr &#x27;\n&#x27; &#x27;,&#x27; | sed &#x27;s/,$//&#x27;)
+
+    [ -z &quot;$members&quot; ] &amp;&amp; members=&quot;(ninguno)&quot;
+
+    printf &quot;%-25s %-8s %s\n&quot; &quot;$g&quot; &quot;$gid&quot; &quot;$members&quot;
+done</code></pre></div><div style="display:contents" dir="auto"><p id="2f1ce7f9-70a6-8008-b376-d3dc3772e8cb" class="">
+</p></div></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

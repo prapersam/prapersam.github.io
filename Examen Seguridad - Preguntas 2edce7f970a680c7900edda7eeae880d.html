@@ -1,0 +1,721 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Examen Seguridad - Preguntas</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="2edce7f9-70a6-80c7-900e-dda7eeae880d" class="page sans"><header><img class="page-cover-image" src="https://images.unsplash.com/photo-1606326608690-4e0281b1e588?ixlib=rb-4.1.0&amp;q=85&amp;fm=jpg&amp;crop=entropy&amp;cs=srgb" style="object-position:center 50%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">📝</span></div><h1 class="page-title" dir="auto">Examen Seguridad - Preguntas</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><div style="display:contents" dir="auto"><h3 id="2edce7f9-70a6-80fd-b541-d85ae4d1377c" class="">1- Cómo explicarías el concepto de defensa en profundidad y el perímetro en el mundo de la informática.</h3></div><div style="display:contents" dir="auto"><p id="2edce7f9-70a6-805d-bf60-e04fb12663ff" class="">El concepto de defensa en profundidad procede del ámbito <strong>militar </strong>y hace referencia a establecer <strong>múltiples líneas de defensa</strong> en vez de una única línea muy fuerte, <strong>atrasando </strong>así el <strong>avance </strong>del enemigo lo máximo posible. Asegurar el perímetro es una de las estrategias más eficaces utilizadas en la antigüedad, para ello debemos pensar en una <strong>fortificación medieval</strong>. <strong>Reducimos </strong>la superficie de <strong>exposición</strong>, crear <strong>puntos controlados </strong>de acceso y <strong>centrar </strong>las <strong>defensas </strong>en eses puntos permite optimizar la capacidad defensiva.</p></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-803d-9be3-d4e4380df2eb" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2efce7f9-70a6-8008-b627-eeaeffbf7bc5"/></div><div style="display:contents" dir="auto"><h3 id="2edce7f9-70a6-8070-8bd3-cbd4434081da" class="">2- Un firewall trata de resolver os problemas de acceso seguro cara a/dende o exterior, e para isto analiza os paquetes poñendo a atención en varios puntos.</h3></div><div style="display:contents" dir="auto"><ul id="2eece7f9-70a6-80f2-835e-d45b5257f898" class="bulleted-list"><li style="list-style-type:disc"><strong>Procedencia</strong>: equipo o red de procedencia del paquete, interfaz por la que se recibe, etc.</li></ul></div><div style="display:contents" dir="auto"><ul id="2eece7f9-70a6-8075-98c4-d336a6614be7" class="bulleted-list"><li style="list-style-type:disc"><strong>Destino</strong>: equipo o red de destino, interfaz por la que sale, puerto destino, etc.</li></ul></div><div style="display:contents" dir="auto"><ul id="2eece7f9-70a6-8023-8783-eb387ce4598e" class="bulleted-list"><li style="list-style-type:disc"><strong>Protocolo empleado</strong>: IP, ICMP, TCP, UDP, etc.</li></ul></div><div style="display:contents" dir="auto"><ul id="2eece7f9-70a6-803d-88c9-cc9f7e8502ec" class="bulleted-list"><li style="list-style-type:disc"><strong>Contenido</strong>: tamaño del paquete, contenido de los datos de aplicación (URL, palabras presentes en la página), etc.</li></ul></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-803c-9234-dbc41e79a3ee" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2efce7f9-70a6-80bc-8a30-d49f2d74ca3c"/></div><div style="display:contents" dir="auto"><h3 id="2edce7f9-70a6-806d-8306-fda152a922c4" class="">3- Qué permite o firewall.</h3></div><div style="display:contents" dir="auto"><ul id="2eece7f9-70a6-8061-86e3-f0de76c35a37" class="bulleted-list"><li style="list-style-type:disc"><strong>Proteger </strong>y <strong>aislar </strong>las aplicaciones, servicios y máquinas de la red interna de tráfico entrante no deseado procedente de redes externa (Internet).</li></ul></div><div style="display:contents" dir="auto"><ul id="2eece7f9-70a6-8050-bf2d-f56df8d94289" class="bulleted-list"><li style="list-style-type:disc"><strong>Limitar </strong>o <strong>cortar el acceso</strong> de equipos de la red interna a servicios ofertados por redes externas a la organización (Internet).</li></ul></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-8056-b346-ff23cdcc1ac6" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2efce7f9-70a6-8070-a377-e88d35d2d63a"/></div><div style="display:contents" dir="auto"><h3 id="2edce7f9-70a6-806a-b61b-dde6a0999e00" class="">4- Tipos de firewalls sobre a base do ámbito de aplicación.</h3></div><div style="display:contents" dir="auto"><ul id="2eece7f9-70a6-806d-a165-f03ddd52a7ee" class="bulleted-list"><li style="list-style-type:disc"><strong>Firewalls de la red</strong>: controla el tráfico de la red permitiendo una gestión centralizada de la seguridad.</li></ul></div><div style="display:contents" dir="auto"><ul id="2eece7f9-70a6-8029-9742-e8224aaa005e" class="bulleted-list"><li style="list-style-type:disc"><strong>Firewalls a nivel de sistema</strong>: instalado como aplicación local controlando el tráfico con origen o destino el equipo.</li></ul></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-8050-bbae-f388c25ac9b8" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2efce7f9-70a6-80d6-bb18-f617ecb6a201"/></div><div style="display:contents" dir="auto"><h3 id="2edce7f9-70a6-80c6-918c-d0b0b9f71a4e" class="">5 -Tipos de firewalls sobre a base do nivel de pila TCP/IP.</h3></div><div style="display:contents" dir="auto"><ul id="2eece7f9-70a6-80d7-a116-f71719634873" class="bulleted-list"><li style="list-style-type:disc"><strong>Network Level Firewalls</strong>: encargados de analizar los valores contenidos en las cabeceras de los diagramas IP, segmentos TCP y datagramas UDP y sobre la base de una serie de reglas establecidas por el administrador deciden la acción a realizar con el paquete de datos.</li></ul></div><div style="display:contents" dir="auto"><ul id="2eece7f9-70a6-8009-a93a-f236c784ad90" class="bulleted-list"><li style="list-style-type:disc"><strong>Application Level Firewalls</strong>: trabajan en el nivel de aplicación actuando de intermediarios entre una red segura y una red no segura, aceptando peticiones de los clientes y actuando en su nombre ante los servidores.</li></ul></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-8048-a237-d40dc5de5af1" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2efce7f9-70a6-8089-a12c-e48e23fbac46"/></div><div style="display:contents" dir="auto"><h3 id="2edce7f9-70a6-80ce-9526-c58a80c875f8" class="">6- Os firewalls á hora de filtrar paquetes poden combinar distintas técnicas.</h3></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-80f0-843b-e6351f8a8a3e" class="">Los firewalls no se limitan a una única técnica de filtrado, sino que <strong>combinan varios mecanismos</strong> para aplicar de forma eficaz la política de seguridad de una organización.</p></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-807e-832e-e492c47dbafb" class="">Las principales técnicas que pueden combinar son:</p></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8042-b6a2-f932260458b8" class="bulleted-list"><li style="list-style-type:disc"><strong>Juego de reglas (ruleset o ACL)</strong>: conjunto de reglas que indican qué tráfico se permite o se bloquea según criterios como IP de origen/destino, puertos y protocolos.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8006-bf53-c560026fbad8" class="bulleted-list"><li style="list-style-type:disc"><strong>Filtrado por estado (Stateful Packet Filtering)</strong>: el firewall mantiene una <strong>tabla de estado</strong> de las conexiones activas y solo permite paquetes que pertenezcan a conexiones previamente autorizadas.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-807e-bc92-f1e54a9cf76b" class="bulleted-list"><li style="list-style-type:disc"><strong>Filtrado de camino inverso (Reverse Path Filtering – RPF)</strong>: verifica que la IP de origen de un paquete sea coherente con la interfaz por la que llega, evitando tráfico con IP falsificada.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80ab-8280-e89f3faf198a" class="bulleted-list"><li style="list-style-type:disc"><strong>Rutas de descarte (null routes)</strong>: el tráfico con destino a ciertas direcciones se envía a una interfaz de descarte.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80ba-9685-f03dd4a86268" class="bulleted-list"><li style="list-style-type:disc"><strong>Filtrado de entrada y salida (ingress / egress filtering)</strong>: el tráfico entrante se filtra en la interfaz externa y el saliente en la interna para mejorar rendimiento y seguridad.</li></ul></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-800c-9368-c82a8dfe3ec6" class="">La combinación de estas técnicas permite un control más preciso y seguro del tráfico de red.</p></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-80f6-9941-f93b121776fc" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2efce7f9-70a6-80da-9ee7-e06c6b7333f8"/></div><div style="display:contents" dir="auto"><h3 id="2edce7f9-70a6-8064-b9c3-f6b6f9742b19" class="">7- Direccións Marcianas. Direccións non asignadas. Regras Antispoofing.</h3></div><div style="display:contents" dir="auto"><h3 id="2efce7f9-70a6-8019-b045-d0c1ba299204" class="">🔹 Direcciones marcianas</h3></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-809c-9444-cf6065de04f7" class="">Son direcciones IP que <strong>no deberían aparecer en tráfico válido de Internet</strong>, ya que están reservadas o tienen un uso especial. Suelen utilizarse para <strong>ocultar tráfico malicioso</strong>.</p></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-802d-adcf-da1126edc7e7" class="">Ejemplos de direcciones marcianas que deben bloquearse:</p></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-806c-af26-dd071f519ee1" class="bulleted-list"><li style="list-style-type:disc">Direcciones privadas (10.0.0.0/8, 192.168.0.0/16, etc.)</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80e9-83fe-c1a0bd2f48f7" class="bulleted-list"><li style="list-style-type:disc">Direcciones de broadcast y multicast</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-802a-8c86-d799b2c9d482" class="bulleted-list"><li style="list-style-type:disc">Direcciones reservadas por la IANA</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8050-aa7f-d31c0428723b" class="bulleted-list"><li style="list-style-type:disc">Direcciones experimentales</li></ul></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-8018-b114-ce52d082d449" class="">El firewall debe <strong>denegar la entrada y salida</strong> de este tipo de direcciones. <br/>Os_Firewalls_e_as_regras_de_fil…</p></div><div style="display:contents" dir="auto"><h3 id="2efce7f9-70a6-805e-b960-ee7e9ce614cf" class="">🔹 Direcciones no asignadas</h3></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-8009-a552-f1aea6ceef5f" class="">Son direcciones IP válidas desde el punto de vista del formato, pero <strong>no están asignadas a ningún organismo o red real</strong>.</p></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-80dd-a4b0-d6eb21d1e253" class="">El tráfico procedente de estas direcciones también debe bloquearse, ya que no tiene justificación legítima.</p></div><div style="display:contents" dir="auto"><h3 id="2efce7f9-70a6-802a-bf72-fbee49c3030b" class="">🔹 Reglas Antispoofing</h3></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-80dd-857a-f5a097d02cd9" class="">Las reglas antispoofing evitan la <strong>suplantación de identidad (IP spoofing)</strong>. Consisten en:</p></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80d7-8307-f5a820d3c287" class="bulleted-list"><li style="list-style-type:disc">Bloquear paquetes que llegan desde Internet con IP de origen de la red interna.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80b8-88d3-fa7231906e67" class="bulleted-list"><li style="list-style-type:disc">Bloquear paquetes que salen de la red interna con IP de origen que no pertenece a la organización.</li></ul></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-80fb-9775-eded87b29cae" class="">Estas reglas aseguran que el tráfico tenga coherencia entre su origen y la red desde la que procede.</p></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-808b-abff-e085eda50ca7" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2efce7f9-70a6-80d1-9b19-f112a226c7d0"/></div><div style="display:contents" dir="auto"><h3 id="2edce7f9-70a6-8019-99b8-dae1999e3ccf" class="">8- Un aspecto moi importante nun sistema de seguridade é a monitorización e os rexistros. O administrador debe poder saber o estado do firewall e que tráfico é/foi autorizado ou bloqueado. É recomendable:</h3></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-80a3-8b44-ee1c59a0c073" class="">La monitorización y los registros (logs) son fundamentales para que el administrador pueda:</p></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80f6-8581-d9e6c288106f" class="bulleted-list"><li style="list-style-type:disc">Conocer el estado del firewall</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80a9-a5c9-f53656538772" class="bulleted-list"><li style="list-style-type:disc">Saber qué tráfico ha sido permitido o bloqueado</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8067-a856-c27d24ab907d" class="bulleted-list"><li style="list-style-type:disc">Detectar intentos de ataque o violaciones de la política de seguridad</li></ul></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-804d-b5b3-c2d2b3e89061" class="">El documento recomienda:</p></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80d2-8933-c959766ab26b" class="bulleted-list"><li style="list-style-type:disc"><strong>Registrar el tráfico denegado</strong> (Log Denied Rule).</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80de-a9e7-e66f386ad969" class="bulleted-list"><li style="list-style-type:disc"><strong>Registrar y alertar tráfico procedente de zonas sensibles</strong>, como la DMZ.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80c2-bd4c-f339739ab151" class="bulleted-list"><li style="list-style-type:disc"><strong>No registrar tráfico ruidoso pero legítimo</strong>, como broadcast o multicast.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-805f-82f5-df794f714e83" class="bulleted-list"><li style="list-style-type:disc"><strong>Centralizar los logs</strong> en un servidor externo para evitar su manipulación si el firewall es comprometido.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80d2-8045-c052ccf50273" class="bulleted-list"><li style="list-style-type:disc">Usar <strong>herramientas SIEM/SIM</strong> para análisis automático y correlación de eventos.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-800d-bf61-ef17a725383a" class="bulleted-list"><li style="list-style-type:disc">Proteger los logs mediante cifrado, control de acceso y políticas de retención.</li></ul></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-8077-802f-d4bdedd319ca" class="">Además, es muy importante <strong>documentar las reglas del firewall</strong>, comentarlas correctamente y mantener una documentación protegida y actualizada.</p></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-807a-82e7-e618c4005c40" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2efce7f9-70a6-80b6-a67c-f54a5ace81d7"/></div><div style="display:contents" dir="auto"><h3 id="2edce7f9-70a6-805a-8d24-fe412cbeb251" class="">9- Network Mapping, qué sabes sobre esto.</h3></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-8051-969c-d7b427e22c78" class="">El <strong>Network Mapping (mapeado de red)</strong> es una de las primeras fases tanto en auditorías de seguridad como en ataques. Su objetivo es <strong>obtener información sobre la red y los sistemas protegidos por el firewall</strong>.</p></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-8086-9881-d5497017b776" class="">Según el documento, mediante Network Mapping se intenta descubrir:</p></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-801d-b848-eadfa611c133" class="bulleted-list"><li style="list-style-type:disc">Equipos activos en la red</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8050-83cf-d8c4113129b7" class="bulleted-list"><li style="list-style-type:disc">Puertos abiertos</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-809d-a7ac-f89968fc0fe2" class="bulleted-list"><li style="list-style-type:disc">Servicios y aplicaciones en ejecución</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80e1-a0f4-fd532e2c127f" class="bulleted-list"><li style="list-style-type:disc">Sistema operativo y versiones</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80ab-9d67-f006b66bed58" class="bulleted-list"><li style="list-style-type:disc">Topología de la red (perímetro, DMZ, redes internas)</li></ul></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-8044-96bd-f77407ecc7ec" class="">Para ello se utilizan técnicas y herramientas como:</p></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80d8-8e26-c9bb834cf2f3" class="bulleted-list"><li style="list-style-type:disc"><strong>Ping y ping sweep</strong> (ICMP)</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80d5-9f3f-cbbb71ae4435" class="bulleted-list"><li style="list-style-type:disc"><strong>Traceroute / tracert</strong></li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8059-b759-d50ed4be46ac" class="bulleted-list"><li style="list-style-type:disc"><strong>Escaneo de puertos (port scanning)</strong> con herramientas como <strong>nmap o Zenmap</strong></li></ul></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-8003-9cd9-f7c52b41afbb" class="">Un firewall bien configurado debe <strong>permitir las comunicaciones necesarias sin revelar información adicional</strong>, dificultando así el mapeado de red por parte de atacantes.</p></div></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

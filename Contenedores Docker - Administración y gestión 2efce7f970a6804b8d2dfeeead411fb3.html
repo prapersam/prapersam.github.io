@@ -1,0 +1,715 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Contenedores Docker - Administración y gestión</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+/* Override strong tags inside headings to maintain consistent weight */
+h1 strong,
+h2 strong,
+h3 strong {
+	font-weight: 600;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 10px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.collection-content td {
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+	margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.callout img.notion-static-icon {
+	width: 1em;
+	height: 1em;
+}
+
+.callout p {
+	margin: 0;
+}
+
+.callout h1,
+.callout h2,
+.callout h3 {
+	margin: 0 0 0.6rem;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+blockquote.quote-large {
+	font-size: 1.25em;
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI Variable Display", "Segoe UI", Helvetica, "Apple Color Emoji", "Noto Sans Arabic", "Noto Sans Hebrew", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.highlight-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.highlight-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.highlight-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.highlight-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.highlight-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.highlight-default_background {
+	color: rgba(44, 44, 43, 1);
+}
+.highlight-gray_background {
+	background: rgba(42, 28, 0, 0.07);
+}
+.highlight-brown_background {
+	background: rgba(139, 46, 0, 0.086);
+}
+.highlight-orange_background {
+	background: rgba(224, 101, 1, 0.129);
+}
+.highlight-yellow_background {
+	background: rgba(211, 168, 0, 0.137);
+}
+.highlight-teal_background {
+	background: rgba(0, 100, 45, 0.09);
+}
+.highlight-blue_background {
+	background: rgba(0, 124, 215, 0.094);
+}
+.highlight-purple_background {
+	background: rgba(102, 0, 178, 0.078);
+}
+.highlight-pink_background {
+	background: rgba(197, 0, 93, 0.086);
+}
+.highlight-red_background {
+	background: rgba(223, 22, 0, 0.094);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(125, 122, 117, 1);
+	fill: rgba(125, 122, 117, 1);
+}
+.block-color-brown {
+	color: rgba(159, 118, 90, 1);
+	fill: rgba(159, 118, 90, 1);
+}
+.block-color-orange {
+	color: rgba(210, 123, 45, 1);
+	fill: rgba(210, 123, 45, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 148, 52, 1);
+	fill: rgba(203, 148, 52, 1);
+}
+.block-color-teal {
+	color: rgba(80, 148, 110, 1);
+	fill: rgba(80, 148, 110, 1);
+}
+.block-color-blue {
+	color: rgba(56, 125, 201, 1);
+	fill: rgba(56, 125, 201, 1);
+}
+.block-color-purple {
+	color: rgba(154, 107, 180, 1);
+	fill: rgba(154, 107, 180, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(207, 81, 72, 1);
+	fill: rgba(207, 81, 72, 1);
+}
+.block-color-default_background {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray_background {
+	background: rgba(240, 239, 237, 1);
+}
+.block-color-brown_background {
+	background: rgba(245, 237, 233, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 235, 222, 1);
+}
+.block-color-yellow_background {
+	background: rgba(249, 243, 220, 1);
+}
+.block-color-teal_background {
+	background: rgba(232, 241, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(229, 242, 252, 1);
+}
+.block-color-purple_background {
+	background: rgba(243, 235, 249, 1);
+}
+.block-color-pink_background {
+	background: rgba(250, 233, 241, 1);
+}
+.block-color-red_background {
+	background: rgba(252, 233, 231, 1);
+}
+.select-value-color-default { background-color: rgba(42, 28, 0, 0.07); }
+.select-value-color-gray { background-color: rgba(28, 19, 1, 0.11); }
+.select-value-color-brown { background-color: rgba(127, 51, 0, 0.156); }
+.select-value-color-orange { background-color: rgba(196, 88, 0, 0.203); }
+.select-value-color-yellow { background-color: rgba(209, 156, 0, 0.282); }
+.select-value-color-green { background-color: rgba(0, 96, 38, 0.156); }
+.select-value-color-blue { background-color: rgba(0, 118, 217, 0.203); }
+.select-value-color-purple { background-color: rgba(92, 0, 163, 0.141); }
+.select-value-color-pink { background-color: rgba(183, 0, 78, 0.152); }
+.select-value-color-red { background-color: rgba(206, 24, 0, 0.164); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="2efce7f9-70a6-804b-8d2d-feeead411fb3" class="page sans"><header><img class="page-cover-image" src="https://miro.medium.com/v2/resize:fit:1400/1*sFlKT6saYqtNeo_ZHavgVA.png" style="object-position:center 57.26%"/><div class="page-header-icon page-header-icon-with-cover"><span class="icon">🐳</span></div><h1 class="page-title" dir="auto">Contenedores Docker - Administración y gestión</h1><p class="page-description" dir="auto"></p></header><div class="page-body"><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-808f-9084-e9fe1b15ca3c" class="">Curso de introducción, instalación y administración de los Contenedores Docker, realizado por Samuel Prado Pereira.</p></div><div style="display:contents" dir="auto"><hr id="2efce7f9-70a6-803c-8cd3-ceff09386d5e"/></div><div style="display:contents" dir="auto"><h1 id="2efce7f9-70a6-807e-a36c-c163a1926157" class="">1. Introducción a los contenedores</h1></div><div style="display:contents" dir="ltr"><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="2efce7f9-70a6-80e7-8564-c1ac07f21740"><div style="font-size:1.5em"><span class="icon">💻</span></div><div style="width:100%"><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-8025-b8d1-d2d3fbaf58fe" class="">La <strong>virtualización</strong> utiliza el software para imitar las características del hardware y crear un sistema informático virtual.</p></div></div></figure></div><div style="display:contents" dir="auto"><h2 id="2efce7f9-70a6-8030-a1bc-fb65d9c353e0" class="">¿Para qué se utiliza la virtualización?</h2></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8066-9b8d-c28eeb046938" class="bulleted-list"><li style="list-style-type:disc"><strong>Aislamiento e independencia</strong>: permite ejecutar varios sistemas operativos y servicios de forma aislada, evitando que los fallos de uno afecten al resto. Cada máquina tiene sus propios recursos (CPU, memoria, almacenamiento y red) lo que garantiza <strong>seguridad</strong>, <strong>estabilidad</strong> <strong>y control </strong>del entorno.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80bb-a4cc-e8a5d2311375" class="bulleted-list"><li style="list-style-type:disc"><strong>Laboratorio de pruebas</strong>: permite experimentar con configuraciones, instalaciones de software, actualizaciones o cambios críticos sin riesgo para el sistema principal o el entorno de producción.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8065-a352-d75ba004c5f8" class="bulleted-list"><li style="list-style-type:disc"><strong>Virtualización de arquitecturas</strong>: permite simular diferentes <strong>arquitecturas de hardware o sistemas operativos</strong>, incluso distintos al equipo físico anfitrión. Esto facilita la ejecución de software diseñado para otros entornos o plataformas, así como la compatibilidad con sistemas antiguos.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8031-9759-dd74d4f5ef3b" class="bulleted-list"><li style="list-style-type:disc"><strong>Creación de clúster</strong>: mediante máquinas virtuales se pueden crear <strong>clústeres de servidores</strong>, simulando entornos de alta disponibilidad y balanceo de carga. Esto permite distribuir servicios entre varias máquinas virtuales, aumentando la tolerancia a fallos y mejorando el rendimiento del sistema.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8084-be4a-f8f4aaac974b" class="bulleted-list"><li style="list-style-type:disc"><strong>Herramienta de aprendizajes</strong>: es una herramienta fundamental en la <strong>formación técnica</strong>, ya que permite a los estudiantes trabajar con servidores reales de forma segura. Facilita el aprendizaje de sistemas operativos, redes, servidores web, bases de datos y servicios sin necesidad de disponer de múltiples equipos físicos.</li></ul></div><div style="display:contents" dir="auto"><h2 id="2efce7f9-70a6-80b0-92ff-e763ce5e6f30" class="">Ventajas  de la virtualización</h2></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80b6-bace-d00a0cec76ee" class="bulleted-list"><li style="list-style-type:disc"><strong>Ahorro económico</strong>: reduce costes al permitir ejecutar varios sistemas en un solo servidor físico, disminuyendo la inversión en hardware y mantenimiento.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8017-8006-d19c4cfecada" class="bulleted-list"><li style="list-style-type:disc"><strong>Seguridad</strong>: el aislamiento entre máquinas virtuales evita que fallos o ataques afecten al resto de sistemas.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80bf-9475-f72a331daf01" class="bulleted-list"><li style="list-style-type:disc"><strong>Mayor aprovechamiento de recursos</strong>: optimiza el uso de CPU, memoria y almacenamiento, evitando infraestructuras infrautilizadas.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80d2-a18b-fea825881753" class="bulleted-list"><li style="list-style-type:disc"><strong>Migración en vivo</strong>: permite mover máquinas virtuales entre servidores sin interrupción del servicio.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8061-9b41-f7de7b5f3fd1" class="bulleted-list"><li style="list-style-type:disc"><strong>Ahorro energético</strong>: disminuye el consumo eléctrico y la refrigeración al reducir el número de servidores físicos.</li></ul></div><div style="display:contents" dir="auto"><h2 id="2efce7f9-70a6-8057-abb0-db48e429f837" class="">Inconvenientes</h2></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-806f-82ff-d3bac3b68fc3" class="bulleted-list"><li style="list-style-type:disc"><strong>Muchos sistemas dependen de un único equipo físico</strong>.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8069-a142-e78313f73593" class="bulleted-list"><li style="list-style-type:disc"><strong>Penalizaciones en rendimiento</strong>. </li></ul></div><div style="display:contents" dir="auto"><h2 id="2efce7f9-70a6-8084-8779-eb38e25c16cd" class="">Tipos de virtualización</h2></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-802e-a497-d73af84db683" class="bulleted-list"><li style="list-style-type:disc"><strong>Emulación</strong>: simula completamente el hardware, permitiendo ejecutar sistemas operativos diseñados para arquitecturas distintas, aunque con menor rendimiento.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8069-aeff-d6fef2af73de" class="bulleted-list"><li style="list-style-type:disc"><strong>Virtualización por hardware de tipo 1</strong>: utiliza un hipervisor que se ejecuta directamente sobre el hardware físico, ofreciendo alto rendimiento y estabilidad.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80f3-a897-c429b6020d34" class="bulleted-list"><li style="list-style-type:disc"><strong>Virtualización completa de tipo 2</strong>: se ejecuta sobre un sistema operativo anfitrión, siendo más sencilla de usar pero con menor rendimiento que la de tipo 1.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80a6-aff6-ffdee9561c84" class="bulleted-list"><li style="list-style-type:disc"><strong>Virtualización ligera</strong>: emplea contenedores que comparten el sistema operativo anfitrión, ofreciendo rapidez, eficiencia y bajo consumo de recursos.</li></ul></div><div style="display:contents" dir="auto"><h2 id="2efce7f9-70a6-8061-87a2-c85cfc0c9ff3" class="">Contenedores</h2></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-806e-bdcd-fa542f2e4f4b" class="bulleted-list"><li style="list-style-type:disc"><strong>Conjunto de procesos aislados, que se ejecutan en un servidor, y que acceden a un sistema de ficheros propio, tienen una configuración de red propia y acceden a los recursos del host (memoria y CPU)</strong>.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80e1-abef-f34357807f45" class="bulleted-list"><li style="list-style-type:disc"><strong>Utilizan para su funcionamiento el núcleo del host donde se ejecutan</strong>.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8017-90d6-fb686d61b003" class="bulleted-list"><li style="list-style-type:disc"><strong>Contenedores de Sistemas</strong>: proporcionan un entorno completo similar a un sistema operativo, permitiendo ejecutar múltiples servicios dentro del contenedor.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-808a-934f-fdd37837dd41" class="bulleted-list"><li style="list-style-type:disc"><strong>Contenedores de Aplicación</strong>: están diseñados para ejecutar una única aplicación o servicio, junto con sus dependencias, de forma eficiente y portable.</li></ul></div><div style="display:contents" dir="auto"><h2 id="2efce7f9-70a6-8056-922b-cbe8134a6cc3" class="">Contenedores y aplicaciones</h2></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8073-896f-e5b561bbeaf8" class="bulleted-list"><li style="list-style-type:disc"><strong>Aplicaciones Monolíticas</strong>: se basan en una única aplicación donde todos los componentes están integrados, normalmente organizados en un <strong>esquema multicapa</strong> (presentación, lógica y datos).<div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8082-a9ab-df092f3051a1" class="bulleted-list"><li style="list-style-type:circle"><strong>Esquema multicapa</strong>: organiza la aplicación en diferentes capas funcionales que trabajan conjuntamente.<div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80f0-a498-c479ae3fb687" class="bulleted-list"><li style="list-style-type:square"><strong>Cada servicio en un contenedor</strong>: cada capa o servicio puede ejecutarse en un contenedor independiente para mejorar el despliegue y la gestión.</li></ul></div></li></ul></div></li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-809a-a860-feacddc45282" class="bulleted-list"><li style="list-style-type:disc"><strong>Microservicios</strong>: dividen la aplicación en pequeños servicios independientes que se comunican entre sí.<div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-80f4-9616-df04c7656624" class="bulleted-list"><li style="list-style-type:circle"><strong>Cada microservicio en un contenedor</strong>: cada microservicio se ejecuta en su propio contenedor, facilitando la escalabilidad, el mantenimiento y las actualizaciones.</li></ul></div></li></ul></div><div style="display:contents" dir="auto"><h2 id="2efce7f9-70a6-804a-a5c8-eeb528cf9414" class="">Ventajas de los contenedores de aplicación</h2></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8069-8639-e7a73690aa77" class="bulleted-list"><li style="list-style-type:disc"><strong>Portabilidad</strong>: permiten ejecutar una aplicación en cualquier entorno que disponga de un motor de contenedores, manteniendo el mismo comportamiento.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8012-ad31-ddc792e99232" class="bulleted-list"><li style="list-style-type:disc"><strong>Aislamiento</strong>: cada contenedor funciona de forma independiente, evitando conflictos entre aplicaciones y sus dependencias.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8045-809c-f8ccb6654d37" class="bulleted-list"><li style="list-style-type:disc"><strong>Eficiencia en el uso de recursos</strong>: consumen menos recursos que las máquinas virtuales al compartir el núcleo del sistema operativo.</li></ul></div><div style="display:contents" dir="auto"><ul id="2efce7f9-70a6-8040-aae3-d803c5b3f36b" class="bulleted-list"><li style="list-style-type:disc"><strong>Despliegue rápido</strong>: facilitan la puesta en marcha y actualización de aplicaciones de forma ágil y automatizada.</li></ul></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-8065-8ea8-f27bd2e2c0c4" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2efce7f9-70a6-8003-b345-edef1299943d"/></div><div style="display:contents" dir="auto"><h1 id="2efce7f9-70a6-80b7-8bac-f2fc74d6bcd3" class="">2. Introducción a Docker</h1></div><div style="display:contents" dir="auto"><h2 id="2efce7f9-70a6-80de-8208-dc92b989a868" class="">Docker</h2></div><div style="display:contents" dir="auto"><h2 id="2efce7f9-70a6-8031-9cbc-c8c64e3a7cfd" class="">Objetos Docker</h2></div><div style="display:contents" dir="auto"><h2 id="2efce7f9-70a6-80d3-aee5-d39e71a0af28" class="">Arquitectura de Docker</h2></div><div style="display:contents" dir="ltr"><figure id="2efce7f9-70a6-8098-93ba-daab89e6876d" class="image" style="text-align:center"><a href="image.png"><img style="width:864px" src="image.png"/></a></figure></div><div style="display:contents" dir="auto"><h2 id="2efce7f9-70a6-8070-ba45-dcbdac0254ed" class="">Docker en la actualidad</h2></div><div style="display:contents" dir="auto"><h2 id="2efce7f9-70a6-8090-b3a7-e584a814decc" class="">Instalar Docker CE</h2></div><div style="display:contents" dir="auto"><h2 id="2efce7f9-70a6-80df-9566-dddab3eb557f" class="">Alternativas a Docker</h2></div><div style="display:contents" dir="auto"><h2 id="2efce7f9-70a6-80df-a678-e6634faf5cb1" class="">Limitaciones de Docker</h2></div><div style="display:contents" dir="auto"><h2 id="2efce7f9-70a6-80f4-aa69-ddc4faf97aec" class="">Orquestadores de contenedores</h2></div><div style="display:contents" dir="auto"><p id="2efce7f9-70a6-809d-a223-f8eef5399df3" class="">
+</p></div><div style="display:contents" dir="auto"><hr id="2efce7f9-70a6-806b-bb9f-ee53b02209fe"/></div><div style="display:contents" dir="auto"><h1 id="2efce7f9-70a6-804c-b0f9-d5f78b6fa713" class="">3. Instalaciones de Docker</h1></div></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
